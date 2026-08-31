@@ -437,16 +437,200 @@
     .hidden { display:none!important; }
 
     /* =========================================================
-       MOBILE
+       MOBILE — full scrollable layout (< 768px)
     ========================================================= */
-    @media (max-width:640px) {
-      .window { position:fixed!important; top:0!important; left:0!important; width:100%!important; height:100%!important; min-width:unset; border-radius:0; animation:mobileSlide .3s ease forwards; }
-      @keyframes mobileSlide { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
-      #dock { gap:8px; padding:8px 10px; }
-      .dock-icon { width:44px; height:44px; font-size:1.35rem; border-radius:12px; }
-      .about-hero { flex-direction:column; }
-      .proj-features { grid-template-columns:1fr; }
+    @media (max-width:767px) {
+
+      /* ── Hide the macOS desktop shell ── */
+      html, body { overflow:auto; height:auto; }
+      #desktop { display:none !important; }
+
+      /* ── Mobile app shell ── */
+      #mobile-app {
+        display:flex; flex-direction:column;
+        min-height:100dvh;
+        background:
+          radial-gradient(ellipse at 80% 12%, rgba(225,29,72,.28) 0%, transparent 55%),
+          radial-gradient(ellipse at 15% 85%, rgba(190,18,60,.32) 0%, transparent 60%),
+          linear-gradient(145deg, #0e0306 0%, #1a050d 30%, #290814 65%, #120308 100%);
+        color:var(--c-text);
+        font-family:var(--font-ui);
+        -webkit-font-smoothing:antialiased;
+        padding-bottom:72px; /* room for bottom nav */
+      }
+
+      /* ── HERO ── */
+      #m-hero {
+        min-height:100dvh;
+        display:flex; flex-direction:column;
+        align-items:center; justify-content:center;
+        text-align:center; padding:32px 24px 80px;
+        position:relative;
+      }
+      #m-hero::before {
+        content:''; position:absolute; inset:0;
+        background:radial-gradient(ellipse at center, rgba(14,3,6,.45) 0%, transparent 70%);
+        pointer-events:none;
+      }
+      .m-avatar {
+        width:96px; height:96px; border-radius:50%;
+        border:3px solid rgba(244,63,94,.45);
+        box-shadow:0 0 0 1px rgba(244,63,94,.15), 0 8px 32px rgba(0,0,0,.6);
+        object-fit:cover; margin-bottom:20px; position:relative;
+      }
+      .m-hero-name {
+        font-size:clamp(1.7rem,7vw,2.4rem);
+        font-weight:700; color:#fff; line-height:1.15; margin-bottom:6px;
+      }
+      .m-hero-role {
+        font-size:.9rem; color:var(--c-accent); font-weight:500; margin-bottom:12px;
+      }
+      .m-hero-uni {
+        font-size:.78rem; color:var(--c-text-dim); margin-bottom:28px;
+      }
+      .m-hero-tagline {
+        font-size:clamp(1rem,4.5vw,1.3rem);
+        color:rgba(255,241,242,.85); line-height:1.5; max-width:300px;
+        margin-bottom:32px;
+      }
+      .m-hero-tagline em {
+        font-family:var(--font-display); font-style:italic; font-weight:700;
+        background:linear-gradient(90deg,#fecdd3 0%,#fda4af 35%,#f43f5e 100%);
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      }
+      .m-cta-row { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+      .m-cta {
+        padding:10px 22px; border-radius:50px; font-size:.85rem; font-weight:600;
+        text-decoration:none; transition:transform .15s, box-shadow .15s;
+        display:inline-flex; align-items:center; gap:8px;
+      }
+      .m-cta:active { transform:scale(.96); }
+      .m-cta-primary {
+        background:linear-gradient(135deg,#e11d48,#9f1239);
+        color:#fff; box-shadow:0 4px 16px rgba(225,29,72,.4);
+      }
+      .m-cta-secondary {
+        background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+        color:var(--c-text);
+      }
+      .m-scroll-hint {
+        position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+        display:flex; flex-direction:column; align-items:center; gap:4px;
+        color:rgba(255,228,230,.35); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase;
+        animation:mScrollPulse 2s ease-in-out infinite;
+      }
+      @keyframes mScrollPulse { 0%,100%{opacity:.35} 50%{opacity:.75} }
+      .m-scroll-hint svg { animation:mScrollBounce 1.8s ease-in-out infinite; }
+      @keyframes mScrollBounce { 0%,100%{transform:translateY(0)} 60%{transform:translateY(5px)} }
+
+      /* ── SECTIONS ── */
+      .m-section {
+        padding:40px 20px 20px;
+        border-top:1px solid rgba(255,255,255,.06);
+      }
+      .m-section-title {
+        font-size:.68rem; text-transform:uppercase; letter-spacing:.14em;
+        color:var(--c-accent); font-weight:700; margin-bottom:20px;
+      }
+
+      /* ── ABOUT BIO ── */
+      .m-bio {
+        font-size:.875rem; line-height:1.75; color:rgba(255,241,242,.85);
+        margin-bottom:18px;
+      }
+      .m-tags { display:flex; flex-wrap:wrap; gap:8px; }
+      .m-tag {
+        background:rgba(244,63,94,.1); border:1px solid rgba(244,63,94,.22);
+        color:#fda4af; font-size:.71rem; padding:4px 11px; border-radius:20px;
+      }
+
+      /* ── PROJECT CARDS ── */
+      .m-proj-card {
+        background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+        border-radius:14px; padding:18px; margin-bottom:14px;
+        transition:border-color .2s, background .2s;
+      }
+      .m-proj-card.featured { border-color:rgba(244,63,94,.25); background:linear-gradient(135deg,rgba(159,18,57,.18),rgba(225,29,72,.06)); }
+      .m-proj-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+      .m-proj-name { font-size:1rem; font-weight:700; color:#fff; }
+      .m-proj-badge {
+        font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+        background:linear-gradient(90deg,#f43f5e,#e11d48); color:#fff;
+        padding:2px 8px; border-radius:20px;
+      }
+      .m-proj-desc { font-size:.82rem; line-height:1.65; color:rgba(255,241,242,.8); margin-bottom:12px; }
+      .m-proj-stack { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+      .m-stack-tag {
+        font-size:.67rem; background:rgba(255,255,255,.06);
+        border:1px solid rgba(255,255,255,.1); color:rgba(255,228,230,.75);
+        padding:3px 9px; border-radius:6px; font-family:var(--font-mono);
+      }
+      .m-proj-link {
+        display:inline-flex; align-items:center; gap:5px;
+        font-size:.78rem; font-weight:600; color:var(--c-accent);
+        text-decoration:none; padding:7px 14px;
+        background:rgba(244,63,94,.1); border:1px solid rgba(244,63,94,.25);
+        border-radius:8px; transition:background .15s;
+      }
+      .m-proj-link:active { background:rgba(244,63,94,.2); }
+
+      /* ── SKILLS ── */
+      .m-skills-group { margin-bottom:22px; }
+      .m-skills-group h3 {
+        font-size:.68rem; text-transform:uppercase; letter-spacing:.1em;
+        color:var(--c-text-dim); margin-bottom:10px; font-weight:600;
+      }
+      .m-skill-chips { display:flex; flex-wrap:wrap; gap:8px; }
+      .m-skill-chip {
+        background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+        color:rgba(255,241,242,.88); font-size:.78rem; padding:7px 13px; border-radius:9px;
+      }
+      .m-skill-bar-item { margin-bottom:10px; }
+      .m-skill-bar-top { display:flex; justify-content:space-between; font-size:.76rem; margin-bottom:5px; color:rgba(255,241,242,.8); }
+      .m-skill-bar-track { height:5px; background:rgba(255,255,255,.08); border-radius:3px; overflow:hidden; }
+      .m-skill-bar-fill { height:100%; background:linear-gradient(90deg,#9f1239,#f43f5e); border-radius:3px; width:0; transition:width .8s cubic-bezier(.4,0,.2,1) .2s; }
+
+      /* ── CONTACT ── */
+      .m-contact-card {
+        display:flex; align-items:center; gap:12px;
+        background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09);
+        border-radius:12px; padding:14px 16px; margin-bottom:12px;
+        text-decoration:none; color:var(--c-text); font-size:.85rem;
+        transition:background .2s;
+      }
+      .m-contact-card:active { background:rgba(255,255,255,.09); }
+      .m-contact-label { font-weight:600; font-size:.78rem; color:var(--c-text-dim); display:block; margin-bottom:1px; }
+      .m-contact-value { font-size:.83rem; color:var(--c-text); }
+
+      /* ── BOTTOM NAV ── */
+      #m-bottom-nav {
+        position:fixed; bottom:0; left:0; right:0; z-index:900;
+        display:flex; align-items:center; justify-content:space-around;
+        padding:0 8px; padding-bottom:env(safe-area-inset-bottom);
+        height:64px;
+        background:rgba(14,3,6,.88);
+        backdrop-filter:blur(24px) saturate(160%);
+        -webkit-backdrop-filter:blur(24px) saturate(160%);
+        border-top:1px solid rgba(255,255,255,.1);
+      }
+      .m-nav-item {
+        display:flex; flex-direction:column; align-items:center; gap:3px;
+        flex:1; padding:8px 4px; cursor:pointer;
+        text-decoration:none; color:rgba(255,228,230,.45);
+        font-size:.6rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+        transition:color .2s; -webkit-tap-highlight-color:transparent;
+        border:none; background:none;
+      }
+      .m-nav-item.active { color:var(--c-accent); }
+      .m-nav-item svg { flex-shrink:0; }
+      .m-nav-item.active svg { filter:drop-shadow(0 0 4px rgba(244,63,94,.6)); }
     }
+
+    /* ── Hide mobile on desktop ── */
+    @media (min-width:768px) {
+      #mobile-app { display:none !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -1159,5 +1343,252 @@
     if (heroLine) initWaveText(heroLine, 20, 70);
   })();
 </script>
+
+<!-- ============================================================
+     MOBILE APP  (shown only on < 768px via CSS)
+============================================================ -->
+<div id="mobile-app">
+
+  <!-- ── HERO ── -->
+  <section id="m-hero">
+    <img src="avatar.png" alt="Soubhagya Yashvardhan" class="m-avatar" />
+    <h1 class="m-hero-name">Soubhagya Yashvardhan</h1>
+    <p class="m-hero-role">Computer Science · ML · Full-Stack</p>
+    <p class="m-hero-uni">B.Tech · Manipal University Jaipur</p>
+    <p class="m-hero-tagline">Hey, I'm Soubhagya. Welcome to my <em>portfolio.</em></p>
+    <div class="m-cta-row">
+      <a href="./Soubhagya Yashvardhan Resume.pdf" target="_blank" class="m-cta m-cta-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Resume
+      </a>
+      <a href="https://github.com/SoubhagyaO2" target="_blank" rel="noopener" class="m-cta m-cta-secondary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        GitHub
+      </a>
+    </div>
+    <div class="m-scroll-hint">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      scroll
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="m-about" class="m-section">
+    <p class="m-section-title">About</p>
+    <p class="m-bio">
+      I'm a Computer Science student who enjoys turning ideas into working products.
+      My work spans <strong>Machine Learning, AI, Full-Stack Development, and Database Systems</strong> — from building
+      ML-powered applications to working with APIs, web scraping, SQL, and modern JavaScript frameworks.
+      <br><br>
+      I learn by building, breaking, debugging, and shipping — with a particular interest in turning
+      data and AI into useful products that solve real problems.
+    </p>
+    <div class="m-tags">
+      <span class="m-tag">Machine Learning</span>
+      <span class="m-tag">Computer Science</span>
+      <span class="m-tag">AI &amp; Agentic AI</span>
+      <span class="m-tag">Python</span>
+      <span class="m-tag">Next.js</span>
+      <span class="m-tag">React</span>
+      <span class="m-tag">SQL</span>
+      <span class="m-tag">Full-Stack</span>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="m-projects" class="m-section">
+    <p class="m-section-title">Projects</p>
+
+    <div class="m-proj-card featured">
+      <div class="m-proj-header">
+        <span class="m-proj-name">LeetCode Orchestration</span>
+        <span class="m-proj-badge">Featured</span>
+      </div>
+      <p class="m-proj-desc">A LeetCode-like coding practice platform for interview preparation. Features curated problems, code execution, and session-based progress tracking.</p>
+      <div class="m-proj-stack">
+        <span class="m-stack-tag">JavaScript</span>
+        <span class="m-stack-tag">Node.js</span>
+        <span class="m-stack-tag">HTML / CSS</span>
+      </div>
+      <a class="m-proj-link" href="https://github.com/SoubhagyaO2/Leetcode-orchestration" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        View on GitHub
+      </a>
+    </div>
+
+    <div class="m-proj-card">
+      <div class="m-proj-header"><span class="m-proj-name">World Cup Predictor</span></div>
+      <p class="m-proj-desc">FIFA World Cup match prediction platform with interactive team analytics, historical performance insights, and multiple ML models.</p>
+      <div class="m-proj-stack">
+        <span class="m-stack-tag">Python</span><span class="m-stack-tag">Scikit-learn</span><span class="m-stack-tag">Streamlit</span><span class="m-stack-tag">XGBoost</span>
+      </div>
+      <a class="m-proj-link" href="https://github.com/SoubhagyaO2/world-cup-match-outcome-predictor" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        View on GitHub
+      </a>
+    </div>
+
+    <div class="m-proj-card">
+      <div class="m-proj-header"><span class="m-proj-name">Currents</span></div>
+      <p class="m-proj-desc">A modern full-stack web application built with Next.js, featuring web scraping, API integrations, and a clean scalable architecture.</p>
+      <div class="m-proj-stack">
+        <span class="m-stack-tag">Next.js</span><span class="m-stack-tag">TypeScript</span><span class="m-stack-tag">React</span><span class="m-stack-tag">APIs</span>
+      </div>
+      <a class="m-proj-link" href="https://github.com/SoubhagyaO2/Currents" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        View on GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- ── SKILLS ── -->
+  <section id="m-skills" class="m-section">
+    <p class="m-section-title">Skills</p>
+
+    <div class="m-skills-group">
+      <h3>Languages &amp; Web</h3>
+      <div class="m-skill-chips">
+        <span class="m-skill-chip">Python</span><span class="m-skill-chip">SQL</span><span class="m-skill-chip">TypeScript</span><span class="m-skill-chip">JavaScript</span><span class="m-skill-chip">HTML / CSS</span>
+      </div>
+    </div>
+    <div class="m-skills-group">
+      <h3>Frameworks &amp; Libraries</h3>
+      <div class="m-skill-chips">
+        <span class="m-skill-chip">Next.js</span><span class="m-skill-chip">React</span><span class="m-skill-chip">Streamlit</span><span class="m-skill-chip">Pandas</span><span class="m-skill-chip">NumPy</span>
+      </div>
+    </div>
+    <div class="m-skills-group">
+      <h3>Machine Learning</h3>
+      <div id="m-skill-bars">
+        <div class="m-skill-bar-item"><div class="m-skill-bar-top"><span>Scikit-learn</span><span>90%</span></div><div class="m-skill-bar-track"><div class="m-skill-bar-fill" data-pct="90"></div></div></div>
+        <div class="m-skill-bar-item"><div class="m-skill-bar-top"><span>Gradient Boosting / XGBoost</span><span>82%</span></div><div class="m-skill-bar-track"><div class="m-skill-bar-fill" data-pct="82"></div></div></div>
+        <div class="m-skill-bar-item"><div class="m-skill-bar-top"><span>Feature Engineering</span><span>85%</span></div><div class="m-skill-bar-track"><div class="m-skill-bar-fill" data-pct="85"></div></div></div>
+      </div>
+    </div>
+    <div class="m-skills-group">
+      <h3>Tools &amp; Platforms</h3>
+      <div class="m-skill-chips">
+        <span class="m-skill-chip">Git / GitHub</span><span class="m-skill-chip">Power BI</span><span class="m-skill-chip">Jupyter</span><span class="m-skill-chip">Docker</span>
+      </div>
+    </div>
+    <div class="m-skills-group">
+      <h3>Currently Exploring</h3>
+      <div class="m-skill-chips">
+        <span class="m-skill-chip" style="border-color:rgba(251,191,36,.3);color:#fbbf24;">LLMs &amp; RAG</span>
+        <span class="m-skill-chip" style="border-color:rgba(251,191,36,.3);color:#fbbf24;">Agentic AI</span>
+        <span class="m-skill-chip" style="border-color:rgba(251,191,36,.3);color:#fbbf24;">Deep Learning</span>
+        <span class="m-skill-chip" style="border-color:rgba(251,191,36,.3);color:#fbbf24;">MLOps</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="m-contact" class="m-section">
+    <p class="m-section-title">Contact</p>
+    <a href="mailto:soubhagyashvardhan@gmail.com" class="m-contact-card">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <div>
+        <span class="m-contact-label">Email</span>
+        <span class="m-contact-value">soubhagyashvardhan@gmail.com</span>
+      </div>
+    </a>
+    <a href="tel:+918448835884" class="m-contact-card">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.45 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16.92z"/></svg>
+      <div>
+        <span class="m-contact-label">Phone</span>
+        <span class="m-contact-value">+91 8448835884</span>
+      </div>
+    </a>
+    <a href="https://www.linkedin.com/in/soubhagya-yashvardhan-19514634a/" target="_blank" rel="noopener" class="m-contact-card">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#60a5fa" style="flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      <div>
+        <span class="m-contact-label">LinkedIn</span>
+        <span class="m-contact-value">soubhagya-yashvardhan</span>
+      </div>
+    </a>
+    <a href="https://github.com/SoubhagyaO2" target="_blank" rel="noopener" class="m-contact-card">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="flex-shrink:0"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      <div>
+        <span class="m-contact-label">GitHub</span>
+        <span class="m-contact-value">SoubhagyaO2</span>
+      </div>
+    </a>
+    <a href="https://leetcode.com/u/TheGameBoy/" target="_blank" rel="noopener" class="m-contact-card">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" fill="#FFA116"/></svg>
+      <div>
+        <span class="m-contact-label">LeetCode</span>
+        <span class="m-contact-value">TheGameBoy</span>
+      </div>
+    </a>
+  </section>
+
+</div><!-- /mobile-app -->
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav id="m-bottom-nav" aria-label="Mobile navigation">
+  <button class="m-nav-item active" onclick="mScrollTo('m-hero')" id="mnav-home">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </button>
+  <button class="m-nav-item" onclick="mScrollTo('m-about')" id="mnav-about">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    About
+  </button>
+  <button class="m-nav-item" onclick="mScrollTo('m-projects')" id="mnav-projects">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Projects
+  </button>
+  <button class="m-nav-item" onclick="mScrollTo('m-skills')" id="mnav-skills">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+    Skills
+  </button>
+  <button class="m-nav-item" onclick="mScrollTo('m-contact')" id="mnav-contact">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    Contact
+  </button>
+</nav>
+
+<script>
+  /* Mobile navigation */
+  function mScrollTo(id) {
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* Active nav tracking */
+  var mSections = ['m-hero','m-about','m-projects','m-skills','m-contact'];
+  var mNavIds   = ['mnav-home','mnav-about','mnav-projects','mnav-skills','mnav-contact'];
+
+  function mUpdateNav() {
+    var scrollY = window.scrollY + window.innerHeight * 0.35;
+    var active = 0;
+    mSections.forEach(function(sid, i) {
+      var el = document.getElementById(sid);
+      if (el && el.offsetTop <= scrollY) active = i;
+    });
+    mNavIds.forEach(function(nid, i) {
+      var btn = document.getElementById(nid);
+      if (btn) btn.classList.toggle('active', i === active);
+    });
+  }
+  window.addEventListener('scroll', mUpdateNav, { passive: true });
+
+  /* Animate skill bars when visible */
+  (function() {
+    var observed = false;
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting && !observed) {
+          observed = true;
+          document.querySelectorAll('.m-skill-bar-fill').forEach(function(b) {
+            b.style.width = b.dataset.pct + '%';
+          });
+        }
+      });
+    }, { threshold: 0.2 });
+    var target = document.getElementById('m-skill-bars');
+    if (target) obs.observe(target);
+  })();
+</script>
 </body>
-</html>
+</html>
